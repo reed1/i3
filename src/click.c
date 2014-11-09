@@ -223,6 +223,14 @@ static int route_click(Con *con, xcb_button_press_event_t *event, const bool mod
             tree_next('n', orientation);
         goto done;
     }
+    
+    /* personal hack, use only right click to switch tab on workspace 1 (primarily for browsers,
+     * the left and middle click on browser tab sometimes missed and target i3's tab instead,
+     * it's now ignored) */
+    if (in_stacked  && strcmp("1", ws->name) == 0 &&
+        (event->detail == XCB_BUTTON_INDEX_1 || event->detail == XCB_BUTTON_INDEX_2)) {
+        goto done;
+    }
 
     /* 2: focus this con. */
     con_focus(con);
